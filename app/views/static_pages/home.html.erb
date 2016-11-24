@@ -1,2 +1,14 @@
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p>
+
+<% provide(:text_from_the_view, "I am a view person.") %>
+
+<h1>
+  this is a test rails 5 app
+</h1>
+
+<p>
+  <%= link_to 'about', static_pages_about_path %>
+</p>
+
+<p>
+  This is a text from the view: <%= yield(:text_from_the_view) %>
+</p>
