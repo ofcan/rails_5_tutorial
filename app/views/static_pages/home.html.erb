@@ -1,14 +1,19 @@
 
-<% provide(:text_from_the_view, "I am a view person.") %>
+<div class="center jumbotron">
+  
+  <h1>
+    this is a test rails 5 app
+  </h1>
+  
+  <h2>
+    What you gonna do 'bout it?
+  </h2>
+  
+  <p>
+    <%= link_to 'engage!', about_path, class: "btn btn-lg btn-primary" %>
+  </p>
+  
+</div>
 
-<h1>
-  this is a test rails 5 app
-</h1>
-
-<p>
-  <%= link_to 'about', static_pages_about_path %>
-</p>
-
-<p>
-  This is a text from the view: <%= yield(:text_from_the_view) %>
-</p>
+<%= link_to image_tag("hcb.png", alt: "Henri Cartier-Bresson's picture"),
+            'http://rubyonrails.org/' %>
