@@ -35,6 +35,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   # Added according to MichaelHartl tutorial
   gem 'sqlite3', '1.3.12'
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :development do
