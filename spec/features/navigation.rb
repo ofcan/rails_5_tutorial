@@ -14,4 +14,5 @@ RSpec.feature "navigation" do
     click_on "logo"
     expect(page).to have_current_path root_path
   end
+
 end
