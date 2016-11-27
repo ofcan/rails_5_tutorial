@@ -38,6 +38,7 @@ group :development, :test do
   # Added according to MichaelHartl tutorial
   gem 'sqlite3', '1.3.12'
   gem 'rspec-rails', '~> 3.5'
+  gem 'capybara'
 end
 
 group :development do
@@ -51,6 +52,9 @@ end
 
 # Added according to MichaelHartl tutorial
 group :production do
+  # NOTICE: postgress will not install properly
+  # unless libpq-dev libraries are installed
+  # so run: sudo apt-get install libpq-dev
   gem 'pg', '0.18.4'
 end
 
