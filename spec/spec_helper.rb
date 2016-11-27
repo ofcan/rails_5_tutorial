@@ -21,7 +21,7 @@ require 'capybara/rspec'
 
 RSpec.configure do |config|
 
-  config.infer_spec_type_from_file_location!
+  #config.infer_spec_type_from_file_location!
 
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
