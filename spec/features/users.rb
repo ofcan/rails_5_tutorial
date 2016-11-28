@@ -45,6 +45,19 @@ RSpec.feature "users" do
     duplicate_user.email = @user.email.upcase
     expect(duplicate_user).to_not be_valid
   end
+  
+  it 'should create a new user' do
+    visit new_user_path
+    fill_in('Name', :with => 'John')
+    fill_in('Email', :with => 'john@example.com')
+    fill_in('Password', :with => '123456')
+    fill_in('Confirmation', :with => '123456')
+  end
+  
+  it 'should visit a user page' do
+    @user.save
+    visit(user_path(@user))    
+  end
 
  # it "should create a new user" do
  #   visit new_user_path
