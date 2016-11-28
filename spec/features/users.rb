@@ -20,6 +20,14 @@ RSpec.feature "users" do
     @user.email = ''
     expect(@user).to_not be_valid
   end
+  
+  it 'should accept only valid email addresses' do
+    addresses = %w[bubba@lula sven@gmail..com]
+    addresses.each do |address|
+      @user.email = address
+      expect(@user).to_not be_valid
+    end
+  end
 
  # it "should create a new user" do
  #   visit new_user_path
