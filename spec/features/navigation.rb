@@ -31,6 +31,13 @@ RSpec.feature "navigation" do
     user = User.create(name: 'sven', email: 'sven@example.com', password: 'secret123', password_confirmation: 'secret123')
     visit users_path
     click_link "#{user.name}"
+    expect(page).to have_current_path user_path(user)
+  end
+
+  it 'should navigate to log in page' do
+    visit root_path
+    click_link "log_in"
+    expect(page).to have_current_path sessions_new_path
   end
 
 end
