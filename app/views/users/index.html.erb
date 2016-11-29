@@ -1,0 +1,9 @@
+<h1>
+  this is a list of all users
+</h1>
+
+<ul>
+  <% @users.each do |u| %>
+    <li><%= u.name %></li>
+  <% end %>
+</ul>

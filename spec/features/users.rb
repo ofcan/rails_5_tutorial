@@ -46,17 +46,42 @@ RSpec.feature "users" do
     expect(duplicate_user).to_not be_valid
   end
   
+  it 'shouldnt create a new user without password_confirmation' do
+    before_count = User.count
+    visit new_user_path
+    fill_in('Name', :with => 'John')
+    fill_in('Email', :with => 'john@example.com')
+    fill_in('Password', :with => '123456')
+    fill_in('Confirmation', :with => '')
+    click_on('Create my account')
+    expect(page).to have_content("Password confirmation doesn't match")
+    after_count = User.count
+    expect(before_count).to eq(after_count)
+    #assert_template 'users/new'    
+    #expect(current_path).to eq new_user_path
+  end
+  
   it 'should create a new user' do
+    before_count = User.count
     visit new_user_path
     fill_in('Name', :with => 'John')
     fill_in('Email', :with => 'john@example.com')
     fill_in('Password', :with => '123456')
     fill_in('Confirmation', :with => '123456')
+    click_on('Create my account')
+    after_count = User.count
+    expect(before_count).to_not eq(after_count)   
+    expect(current_path).to eq user_path(User.last)
+    expect(page).to have_content("Welcome #{User.last.name}!")
   end
   
   it 'should visit a user page' do
     @user.save
     visit(user_path(@user))    
+  end
+  
+  it 'should visit the index page' do
+    visit users_path
   end
 
  # it "should create a new user" do
