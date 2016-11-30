@@ -5,7 +5,6 @@
 <ul>
   <% @users.each do |u| %>
     <li>
-      <%= gravatar_for u %>
       <%= link_to u.name, user_path(u) %>
     </li>
   <% end %>

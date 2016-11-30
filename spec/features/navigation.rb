@@ -37,7 +37,12 @@ RSpec.feature "navigation" do
   it 'should navigate to log in page' do
     visit root_path
     click_link "log_in"
-    expect(page).to have_current_path sessions_new_path
+    expect(page).to have_current_path login_path
+  end
+  
+  it 'should not see account secion in the header if the user is not logged in' do
+    visit root_path
+    expect(page).to_not have_content('Account')
   end
 
 end
