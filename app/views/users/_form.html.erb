@@ -1,0 +1,25 @@
+
+<!--
+  Rails knows how to distinguish what the form is for by internally running
+  @user.new_record? ? new_user_path : edit_user_path(user)
+  -->
+  
+<%= form_for(@user) do |f| %>
+
+  <%= render 'shared/error_messages' %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name, class: 'form-control' %>
+
+  <%= f.label :email %>
+  <%= f.email_field :email, class: 'form-control' %>
+
+  <%= f.label :password %>
+  <%= f.password_field :password, class: 'form-control' %>
+
+  <%= f.label :password_confirmation, "Confirmation" %>
+  <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+  <%= f.submit @form_button_text, class: "btn btn-primary" %>
+
+<% end %>

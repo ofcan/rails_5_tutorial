@@ -80,9 +80,24 @@ RSpec.feature "users" do
     visit(user_path(@user))    
   end
   
-  it 'should visit the index page' do
-    visit users_path
+  it 'should update the user' do
+    @user.save
+    visit login_path
+    fill_in('Email', :with => @user.email)
+    fill_in('Password', :with => @user.password)
+    click_on 'log_in_submit_form'
+    expect(page).to have_current_path user_path(@user)
+    visit edit_user_path(@user)
+    fill_in('Name', :with => 'John')
+    save_and_open_page
+    fill_in('Email', :with => 'john@example.com')
+    fill_in('Password', :with => '123456')
+    fill_in('Confirmation', :with => '123456')
+    click_on('Save my changes')
+    expect(@user.name).to eq('John')
   end
+
+
 
  # it "should create a new user" do
  #   visit new_user_path
