@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out
+    log_out if logged_in? #this solves issues with user being logged in in multiple browsers...
     redirect_to root_url
     flash[:success] = "You've successfully logged out."
   end
