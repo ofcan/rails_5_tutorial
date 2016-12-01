@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   
-  before_action :logged_in_user, only: [:edit, :update]
+  before_action :logged_in_user, only: [:edit, :update, :destroy]
   before_action :correct_user,   only: [:edit, :update]
+  before_action :admin_user, only: :destroy
   
   def index
     @users = User.paginate(page: params[:page])
@@ -44,6 +45,12 @@ class UsersController < ApplicationController
       render 'new'
     end
   end
+
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User successfuly deleted."
+    redirect_to users_path
+  end
   
   private
   
@@ -65,6 +72,10 @@ class UsersController < ApplicationController
     # Ensures the user only can edit himself
     def correct_user
       redirect_to root_path unless current_user == User.find(params[:id])
+    end
+
+    def admin_user
+      redirect_to root_path unless current_user.admin?
     end
   
 end

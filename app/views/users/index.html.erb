@@ -9,6 +9,14 @@
       <li>
         <%= gravatar_for u, size: 50 %>
         <%= link_to u.name, user_path(u) %>
+        <!--
+          "current_user.try(:admin)" is equal to "current_user && current_user.admin?"
+          -->
+        <% if current_user.try(:admin?) && current_user != u %>
+          | <%= link_to 'delete', u, method: :delete,
+                                     data: { confirm: 'Are you sure?' },
+                                     id: "delete_user_#{u.id}" %>
+        <% end %>
       </li>
     <% end %>
   </ul>

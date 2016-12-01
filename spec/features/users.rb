@@ -100,6 +100,24 @@ RSpec.feature "users" do
     visit edit_user_path @another_user
     expect(current_path).to eq root_path
   end
+
+  it "should delete a user as an admin" do
+    @user.save
+    @user.toggle!(:admin)
+    @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    login_as_user(@user)
+    visit users_path
+    click_link "delete_user_#{@another_user.id}"
+    expect(page).to have_content('User successfuly deleted.')
+  end
+
+  it "should not be able to delete another user if current_user is not admin" do
+    @user.save
+    @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    login_as_user(@user)
+    visit users_path
+    expect(page).to_not have_content("delete_user_#{@another_user.id}")
+  end
   
   private
     
@@ -110,15 +128,5 @@ RSpec.feature "users" do
     fill_in('Password', :with => user.password)
     click_on 'log_in_submit_form'
   end
-
-
-
- # it "should create a new user" do
- #   visit new_user_path
- #   fill_in "name", with: "John"
- #   fill_in "email", with: "john@example.com"
- #   click_on "Create"
- #   page.has_content?('Success!')
- # end
 
 end
