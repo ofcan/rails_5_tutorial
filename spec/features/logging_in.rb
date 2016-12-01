@@ -36,5 +36,15 @@ RSpec.feature "navigation" do
     expect(page).to have_current_path root_path
     expect(page).to have_content("You've successfully logged out.")
   end
+  
+  it "should redirect the user to the page he wanted after he logs in" do
+    visit edit_user_path @user
+    expect(page).to have_current_path login_path
+    fill_in('Email', :with => @user.email)
+    fill_in('Password', :with => @user.password)
+    click_on 'log_in_submit_form'
+    expect(page).to have_current_path edit_user_path(@user)
+  end
+
 
 end

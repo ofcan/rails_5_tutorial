@@ -80,21 +80,35 @@ RSpec.feature "users" do
     visit(user_path(@user))    
   end
   
-  it 'should update the user' do
+  it 'should not enable not logged users to edit other users path' do
     @user.save
+    visit edit_user_path @user
+    expect(current_path).to eq login_path
+  end
+
+  it 'should enable logged in user to edit himself' do
+    @user.save
+    login_as_user(@user)
+    visit edit_user_path @user
+    expect(current_path).to eq edit_user_path @user
+  end
+  
+  it 'should not enable logged in user to edit another user' do
+    @user.save
+    @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    login_as_user(@user)
+    visit edit_user_path @another_user
+    expect(current_path).to eq root_path
+  end
+  
+  private
+    
+  # Log in as a particular user.
+  def login_as_user(user)
     visit login_path
-    fill_in('Email', :with => @user.email)
-    fill_in('Password', :with => @user.password)
+    fill_in('Email', :with => user.email)
+    fill_in('Password', :with => user.password)
     click_on 'log_in_submit_form'
-    expect(page).to have_current_path user_path(@user)
-    visit edit_user_path(@user)
-    fill_in('Name', :with => 'John')
-    save_and_open_page
-    fill_in('Email', :with => 'john@example.com')
-    fill_in('Password', :with => '123456')
-    fill_in('Confirmation', :with => '123456')
-    click_on('Save my changes')
-    expect(@user.name).to eq('John')
   end
 
 
