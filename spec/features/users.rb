@@ -71,8 +71,10 @@ RSpec.feature "users" do
     click_on('Create my account')
     after_count = User.count
     expect(before_count).to_not eq(after_count)   
-    expect(current_path).to eq user_path(User.last)
-    expect(page).to have_content("Welcome #{User.last.name}!")
+    #expect(current_path).to eq user_path(User.last)
+    #expect(page).to have_content("Welcome #{User.last.name}!")
+    expect(current_path).to eq root_path
+    expect(page).to have_content("Please check your email to activate your account.")
   end
   
   it 'should visit a user page' do
@@ -86,8 +88,16 @@ RSpec.feature "users" do
     expect(current_path).to eq login_path
   end
 
-  it 'should enable logged in user to edit himself' do
+  it 'should not enable logging in unless user is activated' do
     @user.save
+    login_as_user(@user)
+    expect(current_path).to eq root_path
+    expect(page).to have_content("Account not activated.")
+  end
+  
+  it 'should enable logged in and activated user to edit himself' do
+    @user.save
+    @user.toggle!(:activated)
     login_as_user(@user)
     visit edit_user_path @user
     expect(current_path).to eq edit_user_path @user
@@ -95,6 +105,7 @@ RSpec.feature "users" do
   
   it 'should not enable logged in user to edit another user' do
     @user.save
+    @user.toggle!(:activated)
     @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
     login_as_user(@user)
     visit edit_user_path @another_user
@@ -104,6 +115,7 @@ RSpec.feature "users" do
   it "should delete a user as an admin" do
     @user.save
     @user.toggle!(:admin)
+    @user.toggle!(:activated)
     @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
     login_as_user(@user)
     visit users_path

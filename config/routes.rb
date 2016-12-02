@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   get '/about', to: 'static_pages#about'
   
   resources :users
+  resources :account_activations, only: [:edit]
   
 end

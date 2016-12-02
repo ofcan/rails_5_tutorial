@@ -45,8 +45,9 @@ RSpec.feature "navigation" do
     expect(page).to_not have_content('Account')
   end
 
-  it 'should navigate to user edit page from root path for logged in user' do
+  it 'should navigate to user edit page from root path for logged in and activated user' do
     @user = User.create(name: 'user', email: 'user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    @user.toggle!(:activated)
     visit login_path
     fill_in('Email', :with => @user.email)
     fill_in('Password', :with => @user.password)
@@ -54,6 +55,16 @@ RSpec.feature "navigation" do
     expect(page).to have_current_path user_path(@user)
     click_on 'Settings'
     expect(page).to have_current_path edit_user_path(@user)
+  end
+  
+  it 'should not log in unactivated user' do  
+    @user = User.create(name: 'user', email: 'user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    visit login_path
+    fill_in('Email', :with => @user.email)
+    fill_in('Password', :with => @user.password)
+    click_on 'log_in_submit_form'
+    expect(page).to have_current_path root_path
+    expect(page).to have_content("Account not activated.")
   end
 
 end
