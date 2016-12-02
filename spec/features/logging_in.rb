@@ -7,7 +7,8 @@ RSpec.feature "navigation" do
     @user = User.create(name: 'user', email: 'user@example.com', password: 'secret123', password_confirmation: 'secret123')
   end
 
-  it "should log the user in" do
+  it "should log the user in if the user is activated" do
+    @user.toggle!(:activated)
     visit login_path
     fill_in('Email', :with => @user.email)
     fill_in('Password', :with => @user.password)
@@ -27,8 +28,9 @@ RSpec.feature "navigation" do
     #expect(session[:user_id]).to_not be_nil
   end
   
-  it "should log the user in" do
+  it "should log the user out" do
     visit login_path
+    @user.toggle!(:activated)
     fill_in('Email', :with => @user.email)
     fill_in('Password', :with => @user.password)
     click_on 'log_in_submit_form'
@@ -38,12 +40,24 @@ RSpec.feature "navigation" do
   end
   
   it "should redirect the user to the page he wanted after he logs in" do
+    @user.toggle!(:activated)
     visit edit_user_path @user
     expect(page).to have_current_path login_path
     fill_in('Email', :with => @user.email)
     fill_in('Password', :with => @user.password)
     click_on 'log_in_submit_form'
     expect(page).to have_current_path edit_user_path(@user)
+  end
+
+  it "should enable the user to reset the password had he/she forgotten it" do
+    @user.toggle!(:activated)
+    visit login_path
+    click_link "password_reset"
+    expect(page).to have_current_path new_password_reset_path
+    fill_in('Email', :with => @user.email)
+    click_on "reset_password_submit_form"
+    expect(page).to have_content("Email with password reset instructions sent.")
+    expect(page).to have_current_path root_path
   end
 
 
