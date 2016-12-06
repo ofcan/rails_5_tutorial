@@ -17,7 +17,12 @@ Rails.application.routes.draw do
   #get 'static_pages/about'
   get '/about', to: 'static_pages#about'
   
-  resources :users
+  resources :users do
+    member do
+      get :followers, :following
+    end
+  end
+
   resources :account_activations, only: [:edit]
   resources :password_resets, only: [:new, :edit, :create, :update]
   resources :microposts, only: [:create, :destroy]
