@@ -67,4 +67,16 @@ RSpec.feature "navigation" do
     expect(page).to have_content("Account not activated.")
   end
 
+  it 'should not allow to view followers and following unless user is logged in' do
+    @user = User.create(name: 'user', email: 'user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    @user.toggle!(:activated)
+    @another_user = User.create(name: 'another_user', email: 'another_user@example.com', password: 'secret123', password_confirmation: 'secret123')
+    visit followers_user_path(@user)
+    expect(page).to have_current_path login_path
+    fill_in('Email', :with => @user.email)
+    fill_in('Password', :with => @user.password)
+    click_on 'log_in_submit_form'
+    expect(page).to have_current_path followers_user_path(@user)
+  end
+
 end
